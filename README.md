@@ -22,3 +22,9 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+rspec の実行方法
+
+```sh
+./bin/rspec
+```
