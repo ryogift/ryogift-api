@@ -1,0 +1,9 @@
+<h1>Ryo.gift</h1>
+
+<p>こんにちは <%= @user.name %> さん</p>
+
+<p>Ryo.giftへようこそ！</p>
+<p>以下のリンクをクリックして、アカウントをアクティブにしてください:</p>
+
+<%= link_to "アクティブリンク", edit_account_activation_url(@user.activation_token,
+                                                         email: @user.email) %>
