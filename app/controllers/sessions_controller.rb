@@ -27,14 +27,14 @@ class SessionsController < ApplicationController
     session[:user_id] = user.id
   end
 
-  # ユーザーのセッションを永続的にする
+  # ユーザー情報を永続的にcookieに格納する
   def remember(user)
     user.remember
     cookies.permanent.signed[:user_id] = user.id
     cookies.permanent[:remember_token] = user.remember_token
   end
 
-  # 永続的セッションを破棄する
+  # 永続的cookieを破棄する
   def forget(user)
     user.forget
     cookies.delete(:user_id)
