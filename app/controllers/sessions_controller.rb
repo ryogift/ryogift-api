@@ -8,10 +8,12 @@ class SessionsController < ApplicationController
         params[:session][:remember_me] == "1" ? remember(user) : forget(user)
         render json: user.as_json(except: except), status: :ok
       else
-        render json: user.as_json(except: except), status: :locked
+        error_message = "アカウントが有効になっていません。メールを確認してください。"
+        render json: response_error(error_message), status: :locked
       end
     else
-      render json: {}, status: :unauthorized
+      error_message = "メールアドレスとパスワードの組み合わせが無効です。"
+      render json: response_error(error_message), status: :unauthorized
     end
   end
 
