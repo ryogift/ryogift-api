@@ -51,7 +51,7 @@ RSpec.describe "Sessions", type: :request do
       expect(response).to have_http_status(:locked)
     end
 
-    example "対象のユーザーがアクティブではない場合にレスポンスボディに秘密情報が含まれていないこと" do
+    example "対象のユーザーがアクティブではない場合にエラーメッセージが返却されること" do
       new_user = FactoryBot.create(:user, email: "test@example.com", activated: false)
       params = {
         session: {
@@ -61,15 +61,8 @@ RSpec.describe "Sessions", type: :request do
         }
       }
       post "/login", params: params
-      response_user_keys = JSON.parse(response.body).keys
-      expect(
-        [
-          response_user_keys.include?("password_digest"),
-          response_user_keys.include?("remember_digest"),
-          response_user_keys.include?("reset_digest"),
-          response_user_keys.include?("activation_digest"),
-        ]
-      ).to eq [false, false, false, false]
+      error_message = "アカウントが有効になっていません。メールを確認してください。"
+      expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
     end
 
     example "ログイン認証が失敗した場合に未認証のステータスが返却されること" do
@@ -82,6 +75,19 @@ RSpec.describe "Sessions", type: :request do
       }
       post "/login", params: params
       expect(response).to have_http_status(:unauthorized)
+    end
+
+    example "ログイン認証が失敗した場合ににエラーメッセージが返却されること" do
+      params = {
+        session: {
+          email: @user.email,
+          password: "test",
+          remember_me: "1"
+        }
+      }
+      post "/login", params: params
+      error_message = "メールアドレスとパスワードの組み合わせが無効です。"
+      expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
     end
   end
 

@@ -41,4 +41,10 @@ class ApplicationController < ActionController::API
 
     render status: :unauthorized
   end
+
+  def response_error(message)
+    {
+      error: { message: message }
+    }.to_json
+  end
 end
