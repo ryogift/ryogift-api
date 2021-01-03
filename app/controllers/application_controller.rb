@@ -47,4 +47,12 @@ class ApplicationController < ActionController::API
       error: { message: message }
     }.to_json
   end
+
+  def lower_camelize_keys(object)
+    if object.is_a?(Array)
+      object.map { |item| item.to_h { |k, v| [k.to_s.camelize(:lower).to_sym, v] } }
+    else
+      object.to_h { |k, v| [k.to_s.camelize(:lower).to_sym, v] }
+    end
+  end
 end
