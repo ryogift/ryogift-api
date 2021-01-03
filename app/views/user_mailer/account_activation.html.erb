@@ -5,5 +5,4 @@
 <p>Ryo.giftへようこそ！</p>
 <p>以下のリンクをクリックして、アカウントをアクティブにしてください:</p>
 
-<%= link_to "アクティブリンク", edit_account_activation_url(@user.activation_token,
-                                                         email: @user.email) %>
+<%= link_to "アクティブリンク", @url %>

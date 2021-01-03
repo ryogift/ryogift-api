@@ -1,4 +1,5 @@
 require "rails_helper"
+include ActiveJob::TestHelper
 
 RSpec.describe User, type: :model do
   example "有効なファクトリを持つこと" do
@@ -117,12 +118,15 @@ RSpec.describe User, type: :model do
       expect(user.activated_at.present?).to eq true
     end
 
-    # example "有効化用のメールを送信する" do
-    #   user = FactoryBot.create(:user)
-    #   user.send_activation_email
-    #   binding.pry
-    #   # expect(user.activated_at.present?).to eq true
-    # end
+    example "有効化用のメールを送信すること" do
+      user = FactoryBot.create(:user)
+      ActiveJob::Base.queue_adapter = :test
+      expect do
+        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
+          user.send_activation_email
+        end
+      end.to change(ActionMailer::Base.deliveries, :count).by(1)
+    end
 
     example "パスワード再設定のダイジェストが保存されること" do
       user = FactoryBot.create(:user)
@@ -136,8 +140,16 @@ RSpec.describe User, type: :model do
       expect(user.reset_sent_at.present?).to eq true
     end
 
-    # example "パスワード再設定のメールを送信する" do
-    # end
+    example "パスワード再設定のメールを送信する" do
+      user = FactoryBot.create(:user)
+      user.create_reset_digest
+      ActiveJob::Base.queue_adapter = :test
+      expect do
+        perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
+          user.send_password_reset_email
+        end
+      end.to change(ActionMailer::Base.deliveries, :count).by(1)
+    end
 
     example "パスワード再設定の期限が切れている場合はtrueを返すこと" do
       user = FactoryBot.create(:user)
