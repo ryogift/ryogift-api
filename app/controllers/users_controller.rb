@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  before_action :logged_in_user?, only: [:index, :update, :destroy]
+  before_action :admin?, only: [:index, :destroy]
+
   # GET /users
   def index
     users = User.select(:id, :name, :email, :admin)
@@ -8,6 +11,8 @@ class UsersController < ApplicationController
   # GET /users/:id
   def show
     user = User.select(:id, :name, :email, :admin).find(params[:id])
+    current_user?(user)
+
     render json: user
   end
 
@@ -27,6 +32,7 @@ class UsersController < ApplicationController
   # PUT /users/:id
   def update
     user = User.find(params[:id])
+    current_user?(user)
     if user.update(user_params)
       render json: lower_camelize_keys(user.as_json(except: except))
     else
