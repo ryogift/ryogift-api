@@ -18,12 +18,16 @@ class ApplicationController < ActionController::API
 
   # 渡されたユーザーがカレントユーザーであればtrueを返す
   def current_user?(user)
-    user.present? && user == current_user
+    return if (user.present? && user == current_user) || current_user.admin?
+
+    render json: {}, status: :unauthorized
   end
 
   # 管理者確認
   def admin?
-    current_user.admin?
+    return if current_user.admin?
+
+    render json: {}, status: :unauthorized
   end
 
   def current_user_name
@@ -39,7 +43,7 @@ class ApplicationController < ActionController::API
   def logged_in_user?
     return if logged_in?
 
-    render status: :unauthorized
+    render json: {}, status: :unauthorized
   end
 
   def response_error(message)

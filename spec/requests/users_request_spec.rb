@@ -3,12 +3,16 @@ include ActiveJob::TestHelper
 
 RSpec.describe "Users", type: :request do
   describe "/users" do
-    describe "GET" do
-      before do
-        @user1 = FactoryBot.create(:user, name: "user1", email: "user1@example.com")
-        @user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com")
-      end
+    before do
+      @admin_user = FactoryBot.create(:user, admin: true)
+      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+        { user_id: @admin_user.id }
+      )
+      @user1 = FactoryBot.create(:user, name: "user1", email: "user1@example.com")
+      @user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com")
+    end
 
+    describe "GET" do
       example "HTTPステータスが200 OKであること" do
         get "/users"
         expect(response).to have_http_status(:ok)
@@ -19,6 +23,7 @@ RSpec.describe "Users", type: :request do
         users = JSON.parse(response.body, { symbolize_names: true })
         expect(users).to eq(
           [
+            { id: @admin_user.id, name: @admin_user.name, email: @admin_user.email, admin: @admin_user.admin },
             { id: @user1.id, name: @user1.name, email: @user1.email, admin: @user1.admin },
             { id: @user2.id, name: @user2.name, email: @user2.email, admin: @user2.admin }
           ]
@@ -88,6 +93,9 @@ RSpec.describe "Users", type: :request do
   describe "/users/:id" do
     before do
       @user1 = FactoryBot.create(:user, name: "user1", email: "user1@example.com")
+      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+        { user_id: @user1.id }
+      )
     end
 
     describe "GET" do
