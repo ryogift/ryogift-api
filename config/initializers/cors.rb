@@ -7,11 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    if ENV.fetch("RAILS_ENV") == "production"
-      origins ENV.fetch("RYOGIFT_CLIENT_URL")
-    else
-      origins "localhost"
-    end
+    origins "localhost:8080", ENV.fetch("RYOGIFT_CLIENT_URL")
 
     resource "*",
       headers: :any,

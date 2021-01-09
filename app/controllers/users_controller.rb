@@ -55,6 +55,6 @@ class UsersController < ApplicationController
   end
 
   def except
-    [:password_digest, :remember_digest, :reset_digest, :activation_digest]
+    [:password_digest, :reset_digest, :activation_digest]
   end
 end
