@@ -7,7 +7,7 @@ class AccountActivationsController < ApplicationController
       user.activate
       # login
       session[:user_id] = user.id
-      except = [:password_digest, :remember_digest, :reset_digest, :activation_digest]
+      except = [:password_digest, :reset_digest, :activation_digest]
       render json: lower_camelize_keys(user.as_json(except: except))
     else
       error_message = "アカウントが有効になりませんでした。"

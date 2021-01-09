@@ -6,5 +6,6 @@ FactoryBot.define do
     admin { true }
     activated { true }
     activated_at { Time.zone.now }
+    state { :active }
   end
 end

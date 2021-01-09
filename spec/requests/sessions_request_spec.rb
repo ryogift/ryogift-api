@@ -10,8 +10,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: @user.email,
-          password: "password",
-          remember_me: "1"
+          password: "password"
         }
       }
       post "/login", params: params
@@ -22,8 +21,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: @user.email,
-          password: "password",
-          remember_me: "1"
+          password: "password"
         }
       }
       post "/login", params: params
@@ -31,11 +29,10 @@ RSpec.describe "Sessions", type: :request do
       expect(
         [
           response_user_keys.include?("password_digest"),
-          response_user_keys.include?("remember_digest"),
           response_user_keys.include?("reset_digest"),
           response_user_keys.include?("activation_digest"),
         ]
-      ).to eq [false, false, false, false]
+      ).to eq [false, false, false]
     end
 
     example "対象のユーザーがアクティブではない場合にロック中のステータスが返却されること" do
@@ -43,8 +40,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: new_user.email,
-          password: "password",
-          remember_me: "1"
+          password: "password"
         }
       }
       post "/login", params: params
@@ -56,8 +52,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: new_user.email,
-          password: "password",
-          remember_me: "1"
+          password: "password"
         }
       }
       post "/login", params: params
@@ -69,8 +64,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: @user.email,
-          password: "test",
-          remember_me: "1"
+          password: "test"
         }
       }
       post "/login", params: params
@@ -81,8 +75,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: @user.email,
-          password: "test",
-          remember_me: "1"
+          password: "test"
         }
       }
       post "/login", params: params
@@ -96,8 +89,7 @@ RSpec.describe "Sessions", type: :request do
       params = {
         session: {
           email: @user.email,
-          password: "password",
-          remember_me: "1"
+          password: "password"
         }
       }
       post "/login", params: params

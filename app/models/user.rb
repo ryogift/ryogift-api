@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token, :reset_token
+  attr_accessor :activation_token, :reset_token
 
   before_save :downcase_email
   before_create :create_activation_digest
@@ -10,6 +10,8 @@ class User < ApplicationRecord
                     uniqueness: { case_sensitive: false }
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  enum state: { inactive: 0, active: 1, locked: 2 }, _prefix: true
+  has_many :posts
 
   # 渡された文字列のハッシュ値を返す
   def self.digest(string)
@@ -21,23 +23,12 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
-  # 永続セッションのためにユーザーをデータベースに記憶する
-  def remember
-    self.remember_token = User.new_token
-    update_attribute(:remember_digest, User.digest(remember_token))
-  end
-
   # 渡されたトークンがダイジェストと一致したらtrueを返す
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest")
     return false if digest.nil?
 
     BCrypt::Password.new(digest).is_password?(token)
-  end
-
-  # ユーザーのログイン情報を破棄する
-  def forget
-    update_attribute(:remember_digest, nil)
   end
 
   # アカウントを有効にする

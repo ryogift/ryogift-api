@@ -76,36 +76,6 @@ RSpec.describe User, type: :model do
       expect(User.new_token.length.positive?).to eq true
     end
 
-    example "DBにremember_digestが保存されること" do
-      user = FactoryBot.create(:user)
-      user.remember
-      expect(user.remember_digest.length.positive?).to eq true
-    end
-
-    example "authenticated? ダイジェストがnilのユーザーにはfalseを返すこと" do
-      user = FactoryBot.create(:user)
-      expect(user.authenticated?(:remember, "")).to eq false
-    end
-
-    example "渡されたトークンがダイジェストと一致したらtrueを返すこと" do
-      user = FactoryBot.create(:user, password: "foobar", password_confirmation: "foobar")
-      user.remember
-      expect(user.authenticated?(:password, "foobar")).to eq true
-    end
-
-    example "渡されたトークンがダイジェストと不一致の場合にfalseを返すこと" do
-      user = FactoryBot.create(:user, password: "foobar", password_confirmation: "foobar")
-      user.remember
-      expect(user.authenticated?(:password, "test")).to eq false
-    end
-
-    example "ユーザーのログイン情報を破棄すること" do
-      user = FactoryBot.create(:user)
-      user.remember
-      user.forget
-      expect(user.remember_digest.nil?).to eq true
-    end
-
     example "アカウントを有効にできること" do
       user = FactoryBot.create(:user)
       user.activate

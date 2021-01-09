@@ -108,7 +108,7 @@ RSpec.describe "Users", type: :request do
         get "/users/#{@user1.id}"
         user = JSON.parse(response.body, { symbolize_names: true })
         expect(user).to eq(
-          { id: @user1.id, name: @user1.name, email: @user1.email, admin: @user1.admin },
+          { id: @user1.id, name: @user1.name, email: @user1.email, admin: @user1.admin }
         )
       end
     end
