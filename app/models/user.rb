@@ -33,8 +33,7 @@ class User < ApplicationRecord
 
   # アカウントを有効にする
   def activate
-    update_attribute(:activated, true)
-    update_attribute(:activated_at, Time.zone.now)
+    update!(state: :active, activated_at: Time.zone.now)
   end
 
   # 有効化用のメールを送信する
@@ -45,8 +44,7 @@ class User < ApplicationRecord
   # パスワード再設定の属性を設定する
   def create_reset_digest
     self.reset_token = User.new_token
-    update_attribute(:reset_digest, User.digest(reset_token))
-    update_attribute(:reset_sent_at, Time.zone.now)
+    update!(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
   # パスワード再設定のメールを送信する
@@ -57,6 +55,49 @@ class User < ApplicationRecord
   # パスワード再設定の期限が切れている場合はtrueを返す
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def display_state
+    I18n.t("activerecord.enum.user.state.#{state}")
+  end
+
+  def self.list_json
+    users = all.order(:id)
+    only = [:id, :name, :email, :display_state]
+    methods = [:display_state]
+    users.as_json(methods: methods, only: only)
+  end
+
+  def display_role
+    admin? ? "管理者" : "一般"
+  end
+
+  def display_created_at
+    created_at.present? ? created_at.strftime("%Y/%m/%d %T") : ""
+  end
+
+  def display_activated_at
+    activated_at.present? ? activated_at.strftime("%Y/%m/%d %T") : ""
+  end
+
+  def display_locked_at
+    locked_at.present? ? locked_at.strftime("%Y/%m/%d %T") : ""
+  end
+
+  def to_display_json
+    only = [:id, :name, :email, :display_state, :display_role,
+            :display_created_at, :display_activated_at, :display_locked_at]
+    methods = [:display_state, :display_role, :display_created_at,
+               :display_activated_at, :display_locked_at]
+    as_json(methods: methods, only: only)
+  end
+
+  def lock
+    update!(state: :locked, locked_at: Time.zone.now)
+  end
+
+  def unlock
+    update!(state: :active, locked_at: nil)
   end
 
   private

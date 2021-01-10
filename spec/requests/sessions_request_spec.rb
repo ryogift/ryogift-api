@@ -35,8 +35,8 @@ RSpec.describe "Sessions", type: :request do
       ).to eq [false, false, false]
     end
 
-    example "対象のユーザーがアクティブではない場合にロック中のステータスが返却されること" do
-      new_user = FactoryBot.create(:user, email: "test@example.com", activated: false)
+    example "対象のユーザーがアクティブではない場合にアクセス禁止のステータスが返却されること" do
+      new_user = FactoryBot.create(:user, email: "test@example.com", state: :inactive)
       params = {
         session: {
           email: new_user.email,
@@ -44,11 +44,11 @@ RSpec.describe "Sessions", type: :request do
         }
       }
       post "/login", params: params
-      expect(response).to have_http_status(:locked)
+      expect(response).to have_http_status(:forbidden)
     end
 
     example "対象のユーザーがアクティブではない場合にエラーメッセージが返却されること" do
-      new_user = FactoryBot.create(:user, email: "test@example.com", activated: false)
+      new_user = FactoryBot.create(:user, email: "test@example.com", state: :inactive)
       params = {
         session: {
           email: new_user.email,
@@ -56,7 +56,7 @@ RSpec.describe "Sessions", type: :request do
         }
       }
       post "/login", params: params
-      error_message = "アカウントが有効になっていません。メールを確認してください。"
+      error_message = "アカウントは有効になっていません。メールをご確認ください。"
       expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
     end
 

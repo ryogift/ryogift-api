@@ -79,7 +79,7 @@ RSpec.describe User, type: :model do
     example "アカウントを有効にできること" do
       user = FactoryBot.create(:user)
       user.activate
-      expect(user.activated).to eq true
+      expect(user.state_active?).to eq true
     end
 
     example "アカウントを有効した日時が保存されていること" do

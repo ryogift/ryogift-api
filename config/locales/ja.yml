@@ -8,6 +8,12 @@ ja:
         email: "メールアドレス"
         password: "パスワード"
         password_confirmation: "パスワードの再確認"
+    enum:
+      user:
+        state:
+          inactive: "非アクティブ"
+          active: "アクティブ"
+          locked: "ロック"
   errors:
     format: "%{attribute}%{message}"
     messages:

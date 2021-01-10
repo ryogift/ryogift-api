@@ -1,19 +1,19 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user?, only: [:index, :update, :destroy]
-  before_action :admin?, only: [:index, :destroy]
+  before_action :logged_in_user?
+  before_action :admin?, only: [:index, :destroy, :lock, :unlock]
 
   # GET /users
   def index
-    users = User.select(:id, :name, :email, :admin)
-    render json: users
+    users_json = User.list_json
+    render json: lower_camelize_keys(users_json)
   end
 
   # GET /users/:id
   def show
-    user = User.select(:id, :name, :email, :admin).find(params[:id])
+    user = User.find_by(id: params[:id])
     current_user?(user)
-
-    render json: user
+    user_json = user.to_display_json
+    render json: lower_camelize_keys(user_json)
   end
 
   # POST /users
@@ -44,6 +44,18 @@ class UsersController < ApplicationController
   def destroy
     user = User.find(params[:id])
     user.destroy!
+  end
+
+  # PUT /users/:id/lock
+  def lock
+    user = User.find(params[:id])
+    user.lock
+  end
+
+  # PUT /users/:id/unlock
+  def unlock
+    user = User.find(params[:id])
+    user.unlock
   end
 
   private
