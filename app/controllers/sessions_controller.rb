@@ -4,17 +4,17 @@ class SessionsController < ApplicationController
     except = [:password_digest, :reset_digest, :activation_digest]
     if user.present? && user.authenticate(params[:session][:password])
       if user.state_locked?
-        error_message = "アカウントは凍結されています。管理者にご連絡ください。"
+        error_message = I18n.t("errors.display_message.auth.locked")
         render json: response_error(error_message), status: :locked
       elsif user.state_active?
         log_in user
         render json: user.as_json(except: except), status: :ok
       else
-        error_message = "アカウントは有効になっていません。メールをご確認ください。"
+        error_message = I18n.t("errors.display_message.auth.forbidden")
         render json: response_error(error_message), status: :forbidden
       end
     else
-      error_message = "メールアドレスとパスワードの組み合わせが無効です。"
+      error_message = I18n.t("errors.display_message.auth.unauthorized")
       render json: response_error(error_message), status: :unauthorized
     end
   end

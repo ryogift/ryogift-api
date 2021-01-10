@@ -50,12 +50,14 @@ class UsersController < ApplicationController
   def lock
     user = User.find(params[:id])
     user.lock
+    render json: {}
   end
 
   # PUT /users/:id/unlock
   def unlock
     user = User.find(params[:id])
     user.unlock
+    render json: {}
   end
 
   private

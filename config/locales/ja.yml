@@ -14,6 +14,11 @@ ja:
           inactive: "非アクティブ"
           active: "アクティブ"
           locked: "ロック"
+    display:
+      user:
+        role:
+          admin: 管理者
+          normal: 一般
   errors:
     format: "%{attribute}%{message}"
     messages:
@@ -41,3 +46,8 @@ ja:
       other_than: "は%{count}以外の値にしてください。"
       present: "は入力しないでください。"
       wrong_length: "は%{count}文字でご入力ください。"
+    display_message:
+      auth:
+        unauthorized: "メールアドレスとパスワードの組み合わせが無効です。"
+        forbidden: "アカウントは有効になっていません。メールをご確認ください。"
+        locked: "アカウントは凍結されています。管理者にご連絡ください。"

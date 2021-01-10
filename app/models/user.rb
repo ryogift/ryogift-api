@@ -69,19 +69,20 @@ class User < ApplicationRecord
   end
 
   def display_role
-    admin? ? "管理者" : "一般"
+    role = admin? ? :admin : :normal
+    I18n.t("activerecord.display.user.role.#{role}")
   end
 
   def display_created_at
-    created_at.present? ? created_at.strftime("%Y/%m/%d %T") : ""
+    created_at.present? ? created_at.strftime(DISPLAY_DATETIME) : ""
   end
 
   def display_activated_at
-    activated_at.present? ? activated_at.strftime("%Y/%m/%d %T") : ""
+    activated_at.present? ? activated_at.strftime(DISPLAY_DATETIME) : ""
   end
 
   def display_locked_at
-    locked_at.present? ? locked_at.strftime("%Y/%m/%d %T") : ""
+    locked_at.present? ? locked_at.strftime(DISPLAY_DATETIME) : ""
   end
 
   def to_display_json

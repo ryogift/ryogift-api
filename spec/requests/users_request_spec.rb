@@ -138,6 +138,36 @@ RSpec.describe "Users", type: :request do
         put "/users/#{@user1.id}", params: { user: { name: "" } }
         expect(JSON.parse(response.body)["name"]).to eq(I18n.t("errors.messages.blank"))
       end
+
+      describe "/users/:id/lock" do
+        example "HTTPステータスが200 OKであること" do
+          put "/users/#{@user1.id}/lock"
+          expect(response).to have_http_status(:ok)
+        end
+
+        example "ユーザーがロックされること" do
+          put "/users/#{@user1.id}/lock"
+          @user1.reload
+          expect(@user1.state_locked?).to eq true
+        end
+      end
+
+      describe "/users/:id/unlock" do
+        example "HTTPステータスが200 OKであること" do
+          user = FactoryBot.create(:user, email: "test@example.com",
+                                           state: :locked, locked_at: Time.zone.now)
+          put "/users/#{user.id}/unlock"
+          expect(response).to have_http_status(:ok)
+        end
+
+        example "ユーザーがアンロックされること" do
+          user = FactoryBot.create(:user, email: "test@example.com",
+                                           state: :locked, locked_at: Time.zone.now)
+          put "/users/#{user.id}/unlock"
+          user.reload
+          expect(user.state_active?).to eq true
+        end
+      end
     end
 
     describe "DELETE" do
