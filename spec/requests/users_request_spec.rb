@@ -18,14 +18,14 @@ RSpec.describe "Users", type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      example "ユーザー一覧が取得できること" do
+      example "ユーザー 一覧が取得できること" do
         get "/users"
         users = JSON.parse(response.body, { symbolize_names: true })
         expect(users).to eq(
           [
-            { id: @admin_user.id, name: @admin_user.name, email: @admin_user.email, admin: @admin_user.admin },
-            { id: @user1.id, name: @user1.name, email: @user1.email, admin: @user1.admin },
-            { id: @user2.id, name: @user2.name, email: @user2.email, admin: @user2.admin }
+            { id: @admin_user.id, name: @admin_user.name, email: @admin_user.email, displayState: @admin_user.display_state },
+            { id: @user1.id, name: @user1.name, email: @user1.email, displayState: @user1.display_state },
+            { id: @user2.id, name: @user2.name, email: @user2.email, displayState: @user2.display_state }
           ]
         )
       end
@@ -108,7 +108,11 @@ RSpec.describe "Users", type: :request do
         get "/users/#{@user1.id}"
         user = JSON.parse(response.body, { symbolize_names: true })
         expect(user).to eq(
-          { id: @user1.id, name: @user1.name, email: @user1.email, admin: @user1.admin }
+          {
+            id: @user1.id, name: @user1.name, email: @user1.email, displayState: @user1.display_state,
+            displayRole: @user1.display_role, displayCreatedAt: @user1.display_created_at,
+            displayActivatedAt: @user1.display_activated_at, displayLockedAt: @user1.display_locked_at
+          }
         )
       end
     end

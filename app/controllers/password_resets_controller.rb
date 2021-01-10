@@ -46,7 +46,7 @@ class PasswordResetsController < ApplicationController
 
   # 有効なユーザーかどうか確認する
   def valid_user?
-    return if (@user.present? && @user.activated? &&
+    return if (@user.present? && @user.state_inactive? &&
                @user.authenticated?(:reset, params[:id]))
 
     # redirect_to "/422.html"

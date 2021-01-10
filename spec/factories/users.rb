@@ -4,7 +4,6 @@ FactoryBot.define do
     email { "michael@example.com" }
     password_digest { User.digest("password") }
     admin { true }
-    activated { true }
     activated_at { Time.zone.now }
     state { :active }
   end

@@ -3,13 +3,15 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     except = [:password_digest, :reset_digest, :activation_digest]
     if user.present? && user.authenticate(params[:session][:password])
-      if user.activated?
+      if user.state_locked?
+        error_message = "アカウントは凍結されています。管理者にご連絡ください。"
+        render json: response_error(error_message), status: :locked
+      elsif user.state_active?
         log_in user
-        cookies.signed[:user_id] = user.id
         render json: user.as_json(except: except), status: :ok
       else
-        error_message = "アカウントが有効になっていません。メールを確認してください。"
-        render json: response_error(error_message), status: :locked
+        error_message = "アカウントは有効になっていません。メールをご確認ください。"
+        render json: response_error(error_message), status: :forbidden
       end
     else
       error_message = "メールアドレスとパスワードの組み合わせが無効です。"
@@ -27,6 +29,7 @@ class SessionsController < ApplicationController
   # 渡されたユーザーでログインする
   def log_in(user)
     session[:user_id] = user.id
+    cookies.signed[:user_id] = user.id
   end
 
   # 現在のユーザーをログアウトする

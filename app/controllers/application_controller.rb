@@ -10,7 +10,8 @@ class ApplicationController < ActionController::API
     elsif cookies.signed[:user_id]
       user = User.find_by(id: cookies.signed[:user_id])
       if user.present?
-        log_in user
+        session[:user_id] = user.id
+        cookies.signed[:user_id] = user.id
         @current_user = user
       end
     end
