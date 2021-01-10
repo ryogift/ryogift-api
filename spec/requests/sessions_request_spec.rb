@@ -56,7 +56,7 @@ RSpec.describe "Sessions", type: :request do
         }
       }
       post "/login", params: params
-      error_message = "アカウントは有効になっていません。メールをご確認ください。"
+      error_message = I18n.t("errors.display_message.auth.forbidden")
       expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
     end
 
@@ -71,7 +71,7 @@ RSpec.describe "Sessions", type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
 
-    example "ログイン認証が失敗した場合ににエラーメッセージが返却されること" do
+    example "ログイン認証が失敗した場合にエラーメッセージが返却されること" do
       params = {
         session: {
           email: @user.email,
@@ -79,7 +79,34 @@ RSpec.describe "Sessions", type: :request do
         }
       }
       post "/login", params: params
-      error_message = "メールアドレスとパスワードの組み合わせが無効です。"
+      error_message = I18n.t("errors.display_message.auth.unauthorized")
+      expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
+    end
+
+    example "アカウントがロックされている場合にロックのステータスが返却されること" do
+      user = FactoryBot.create(:user, email: "test@example.com", password_digest: User.digest("password"),
+                                      state: :locked, locked_at: Time.zone.now)
+      params = {
+        session: {
+          email: user.email,
+          password: "password"
+        }
+      }
+      post "/login", params: params
+      expect(response).to have_http_status(:locked)
+    end
+
+    example "アカウントがロックされている場合にエラーメッセージが返却されること" do
+      user = FactoryBot.create(:user, email: "test@example.com", password_digest: User.digest("password"),
+                                      state: :locked, locked_at: Time.zone.now)
+      params = {
+        session: {
+          email: user.email,
+          password: "password"
+        }
+      }
+      post "/login", params: params
+      error_message = I18n.t("errors.display_message.auth.locked")
       expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
     end
   end

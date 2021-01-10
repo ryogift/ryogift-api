@@ -6,11 +6,11 @@ class Post < ApplicationRecord
   delegate :name, to: :user, prefix: true
 
   def display_updated_at
-    updated_at.present? ? updated_at.strftime("%Y/%m/%d %T") : ""
+    updated_at.present? ? updated_at.strftime(DISPLAY_DATETIME) : ""
   end
 
   def display_published_at
-    published_at.present? ? published_at.strftime("%Y/%m/%d %T") : ""
+    published_at.present? ? published_at.strftime(DISPLAY_DATETIME) : ""
   end
 
   def self.list_json(user_id: nil)
