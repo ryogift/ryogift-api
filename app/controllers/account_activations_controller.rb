@@ -1,6 +1,7 @@
 class AccountActivationsController < ApplicationController
-  def edit
-    user = User.find_by(email: params[:email])
+  # PUT /account_activations/:id
+  def update
+    user = User.find_by(email: user_params[:email])
     if user.present? && user.state_inactive? && user.authenticated?(:activation, params[:id])
       user.activate
       log_in(user)
@@ -13,6 +14,10 @@ class AccountActivationsController < ApplicationController
   end
 
   private
+
+  def user_params
+    params.require(:user).permit(:email)
+  end
 
   def log_in(user)
     session[:user_id] = user.id

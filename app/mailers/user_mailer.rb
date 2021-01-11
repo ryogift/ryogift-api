@@ -15,7 +15,7 @@ class UserMailer < ApplicationMailer
 
   def generate_edit_account_activation_url(user)
     query = { token: user.activation_token, email: user.email }.to_query
-    "#{ENV.fetch('RYOGIFT_CLIENT_URL')}/accountactivations/edit?#{query}"
+    "#{ENV.fetch('RYOGIFT_CLIENT_URL')}/accountactivations?#{query}"
   end
 
   def generate_edit_password_reset_url(user)
