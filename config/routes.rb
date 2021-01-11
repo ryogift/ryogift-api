@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       put "unlock"
     end
   end
-  resources :account_activations, only: [:edit]
+  resources :account_activations, only: [:update]
   resources :password_resets, only: [:create, :update]
   resources :posts
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
