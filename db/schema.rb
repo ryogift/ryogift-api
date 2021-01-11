@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2021_01_08_165714) do
     t.datetime "reset_sent_at"
     t.datetime "locked_at"
     t.boolean "admin", default: false
-    t.integer "state"
+    t.integer "state", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
