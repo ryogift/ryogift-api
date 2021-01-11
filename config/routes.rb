@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
   resources :account_activations, only: [:edit]
-  resources :password_resets, only: [:new, :create, :edit, :update]
+  resources :password_resets, only: [:create, :update]
   resources :posts
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 end

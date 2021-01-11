@@ -19,7 +19,7 @@ class UserMailer < ApplicationMailer
   end
 
   def generate_edit_password_reset_url(user)
-    query = { token: user.reset_token,email: user.email }.to_query
-    "#{ENV.fetch('RYOGIFT_CLIENT_URL')}/passwordresets/edit?#{query}"
+    query = { token: user.reset_token, email: user.email }.to_query
+    "#{ENV.fetch('RYOGIFT_CLIENT_URL')}/passwordresets?#{query}"
   end
 end

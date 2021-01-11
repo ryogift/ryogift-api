@@ -1,62 +1,46 @@
 class PasswordResetsController < ApplicationController
-  before_action :set_user, only: [:edit, :update]
-  before_action :valid_user?, only: [:edit, :update]
-  before_action :expiration?, only: [:edit, :update]
-
-  def new
-  end
-
+  # POST /password_resets
   def create
-    @user = User.find_by(email: params[:password_reset][:email].downcase)
-    if @user
-      @user.create_reset_digest
-      @user.send_password_reset_email
-      # flash.now[:info] = "パスワードリセット手順についての<br />メールを送信しました。"
+    user = User.find_by(email: params[:email].downcase)
+    if user
+      user.create_reset_digest
+      user.send_password_reset_email
+      render json: {}
     else
-      # flash.now[:danger] = "ご入力したメールアドレスのアカウントは存在しません。"
+      error_message = I18n.t("errors.display_message.password_reset.not_found")
+      render json: response_error(error_message), status: :not_found
     end
-    # render "new"
   end
 
-  def edit
-  end
-
+  # PUT /password_resets/:id
   def update
-    if params[:user][:password].empty?
-      @user.errors.add(:password, :blank)
-      # render "edit"
-    elsif @user.update(user_params)
-      # log_in @user
-      # flash[:success] = "パスワードがリセットされました。"
-      # redirect_to @user
+    user = User.find_by(email: user_params[:email])
+
+    # 有効なユーザーかどうか確認する
+    unless user.present? && user.state_inactive? && user.authenticated?(:reset, params[:id])
+      error_message = I18n.t("errors.display_message.password_reset.invalid")
+      return render json: response_error(error_message), status: :unprocessable_entity
+    end
+
+    # トークンが期限切れかどうか確認する
+    if user.password_reset_expired?
+      error_message = I18n.t("errors.display_message.password_reset.expired")
+      return render json: response_error(error_message), status: :unprocessable_entity
+    end
+
+    if user_params[:password].blank? || user_params[:password_confirmation].blank?
+      error_message = I18n.t("errors.display_message.password_reset.blank")
+      render json: response_error(error_message), status: :unprocessable_entity
+    elsif user.update(password: user_params[:password], password_confirmation: user_params[:password_confirmation])
+      render json: {}
     else
-      # render "edit"
+      render json: lower_camelize_keys(user.errors), status: :unprocessable_entity
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:password, :password_confirmation)
-  end
-
-  def set_user
-    @user = User.find_by(email: params[:email])
-  end
-
-  # 有効なユーザーかどうか確認する
-  def valid_user?
-    return if (@user.present? && @user.state_inactive? &&
-               @user.authenticated?(:reset, params[:id]))
-
-    # redirect_to "/422.html"
-  end
-
-  # トークンが期限切れかどうか確認する
-  def expiration?
-    return unless @user.password_reset_expired?
-
-    # flash[:danger] = "パスワードのリセットが期限切れになりました。"
-    # redirect_to new_password_reset_url
+    params.require(:user).permit(:email, :password, :password_confirmation)
   end
 end
