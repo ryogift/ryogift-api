@@ -10,7 +10,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.datetime :reset_sent_at
       t.datetime :locked_at
       t.boolean :admin, default: false
-      t.integer :state
+      t.integer :state, default: 0
 
       t.timestamps
     end
