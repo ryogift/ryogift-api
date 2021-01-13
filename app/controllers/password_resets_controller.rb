@@ -17,7 +17,7 @@ class PasswordResetsController < ApplicationController
     user = User.find_by(email: user_params[:email])
 
     # 有効なユーザーかどうか確認する
-    unless user.present? && user.state_inactive? && user.authenticated?(:reset, params[:id])
+    unless user.present? && user.state_active? && user.authenticated?(:reset, params[:id])
       error_message = I18n.t("errors.display_message.password_reset.invalid")
       return render json: response_error(error_message), status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class PasswordResetsController < ApplicationController
     elsif user.update(password: user_params[:password], password_confirmation: user_params[:password_confirmation])
       render json: {}
     else
-      render json: lower_camelize_keys(user.errors), status: :unprocessable_entity
+      render json: lower_camelize_keys(user.errors.as_json), status: :unprocessable_entity
     end
   end
 

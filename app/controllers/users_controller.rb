@@ -25,7 +25,7 @@ class UsersController < ApplicationController
       render(json: lower_camelize_keys(user.as_json(except: except)),
              status: :created, location: user)
     else
-      render json: lower_camelize_keys(user.errors), status: :unprocessable_entity
+      render json: lower_camelize_keys(user.errors.as_json), status: :unprocessable_entity
     end
   end
 
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
     if user.update(user_params)
       render json: lower_camelize_keys(user.as_json(except: except))
     else
-      render json: lower_camelize_keys(user.errors), status: :unprocessable_entity
+      render json: lower_camelize_keys(user.errors.as_json), status: :unprocessable_entity
     end
   end
 

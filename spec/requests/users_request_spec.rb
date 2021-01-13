@@ -155,14 +155,14 @@ RSpec.describe "Users", type: :request do
       describe "/users/:id/unlock" do
         example "HTTPステータスが200 OKであること" do
           user = FactoryBot.create(:user, email: "test@example.com",
-                                           state: :locked, locked_at: Time.zone.now)
+                                          state: :locked, locked_at: Time.zone.now)
           put "/users/#{user.id}/unlock"
           expect(response).to have_http_status(:ok)
         end
 
         example "ユーザーがアンロックされること" do
           user = FactoryBot.create(:user, email: "test@example.com",
-                                           state: :locked, locked_at: Time.zone.now)
+                                          state: :locked, locked_at: Time.zone.now)
           put "/users/#{user.id}/unlock"
           user.reload
           expect(user.state_active?).to eq true

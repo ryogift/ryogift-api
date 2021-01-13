@@ -30,7 +30,7 @@ RSpec.describe "Sessions", type: :request do
         [
           response_user_keys.include?("password_digest"),
           response_user_keys.include?("reset_digest"),
-          response_user_keys.include?("activation_digest"),
+          response_user_keys.include?("activation_digest")
         ]
       ).to eq [false, false, false]
     end
