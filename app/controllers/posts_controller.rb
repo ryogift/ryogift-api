@@ -21,7 +21,7 @@ class PostsController < ApplicationController
       render(json: lower_camelize_keys(post.as_json),
              status: :created, location: post)
     else
-      render json: lower_camelize_keys(post.errors), status: :unprocessable_entity
+      render json: lower_camelize_keys(post.errors.as_json), status: :unprocessable_entity
     end
   end
 
@@ -33,7 +33,7 @@ class PostsController < ApplicationController
     elsif post.update(post_params)
       render json: lower_camelize_keys(post.as_json)
     else
-      render json: lower_camelize_keys(post.errors), status: :unprocessable_entity
+      render json: lower_camelize_keys(post.errors.as_json), status: :unprocessable_entity
     end
   end
 
