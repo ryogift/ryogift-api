@@ -135,7 +135,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "send_password_reset_email" do
-    example "パスワード再設定のメールを送信する" do
+    example "パスワード再設定のメールを送信すること" do
       user = FactoryBot.create(:user)
       user.create_reset_digest
       ActiveJob::Base.queue_adapter = :test
@@ -246,7 +246,8 @@ RSpec.describe User, type: :model do
           display_role: user.display_role,
           display_created_at: user.display_created_at,
           display_activated_at: user.display_activated_at,
-          display_locked_at: user.display_locked_at
+          display_locked_at: user.display_locked_at,
+          admin: user.admin
         }
       )
     end

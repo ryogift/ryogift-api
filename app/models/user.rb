@@ -87,7 +87,7 @@ class User < ApplicationRecord
 
   def to_display_json
     only = [:id, :name, :email, :display_state, :display_role,
-            :display_created_at, :display_activated_at, :display_locked_at]
+            :display_created_at, :display_activated_at, :display_locked_at, :admin]
     methods = [:display_state, :display_role, :display_created_at,
                :display_activated_at, :display_locked_at]
     as_json(methods: methods, only: only)
