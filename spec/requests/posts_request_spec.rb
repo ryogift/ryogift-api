@@ -66,7 +66,8 @@ RSpec.describe "Posts", type: :request do
           }
         }
         post "/posts", params: params
-        expect(JSON.parse(response.body)["content"]).to eq(I18n.t("errors.messages.blank"))
+        result = JSON.parse(response.body, { symbolize_names: true })
+        expect(result[:content]).to include(I18n.t("errors.messages.blank"))
       end
     end
   end
@@ -117,7 +118,8 @@ RSpec.describe "Posts", type: :request do
 
       example "バリデーションエラー時にエラーメッセージが返却されること" do
         put "/posts/#{@post1.id}", params: { post: { content: "" } }
-        expect(JSON.parse(response.body)["content"]).to eq(I18n.t("errors.messages.blank"))
+        result = JSON.parse(response.body, { symbolize_names: true })
+        expect(result[:content]).to include(I18n.t("errors.messages.blank"))
       end
 
       example "ユーザーの投稿情報ではない場合にHTTPステータスが404 Not Foundであること" do

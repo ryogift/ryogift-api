@@ -17,7 +17,7 @@ RSpec.describe "Sessions", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    example "レスポンスボディに秘密情報が含まれていないこと" do
+    example "ユーザー情報が取得できること" do
       params = {
         session: {
           email: @user.email,
@@ -25,14 +25,15 @@ RSpec.describe "Sessions", type: :request do
         }
       }
       post "/login", params: params
-      response_user_keys = JSON.parse(response.body).keys
-      expect(
-        [
-          response_user_keys.include?("password_digest"),
-          response_user_keys.include?("reset_digest"),
-          response_user_keys.include?("activation_digest")
-        ]
-      ).to eq [false, false, false]
+      user = JSON.parse(response.body, { symbolize_names: true })
+      expect(user).to eq(
+        {
+          id: @user.id, name: @user.name, email: @user.email, displayState: @user.display_state,
+          displayRole: @user.display_role, displayCreatedAt: @user.display_created_at,
+          displayActivatedAt: @user.display_activated_at, displayLockedAt: @user.display_locked_at,
+          admin: @user.admin
+        }
+      )
     end
 
     example "対象のユーザーがアクティブではない場合にアクセス禁止のステータスが返却されること" do
@@ -57,7 +58,8 @@ RSpec.describe "Sessions", type: :request do
       }
       post "/login", params: params
       error_message = I18n.t("errors.display_message.auth.forbidden")
-      expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
+      result = JSON.parse(response.body, { symbolize_names: true })
+      expect(result[:error][:message]).to eq error_message
     end
 
     example "ログイン認証が失敗した場合に未認証のステータスが返却されること" do
@@ -80,7 +82,8 @@ RSpec.describe "Sessions", type: :request do
       }
       post "/login", params: params
       error_message = I18n.t("errors.display_message.auth.unauthorized")
-      expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
+      result = JSON.parse(response.body, { symbolize_names: true })
+      expect(result[:error][:message]).to eq error_message
     end
 
     example "アカウントがロックされている場合にロックのステータスが返却されること" do
@@ -107,7 +110,8 @@ RSpec.describe "Sessions", type: :request do
       }
       post "/login", params: params
       error_message = I18n.t("errors.display_message.auth.locked")
-      expect(JSON.parse(response.body)["error"]["message"]).to eq error_message
+      result = JSON.parse(response.body, { symbolize_names: true })
+      expect(result[:error][:message]).to eq error_message
     end
   end
 

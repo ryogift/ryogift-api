@@ -11,7 +11,8 @@ class UsersController < ApplicationController
   # GET /users/:id
   def show
     user = User.find_by(id: params[:id])
-    current_user?(user)
+    return render json: {}, status: :unauthorized unless current_user?(user)
+
     user_json = user.to_display_json
     render json: lower_camelize_keys(user_json)
   end
@@ -32,6 +33,8 @@ class UsersController < ApplicationController
   # PUT /users/:id
   def update
     user = User.find(params[:id])
+    return render json: {}, status: :unauthorized unless current_user?(user)
+
     current_user?(user)
     if user.update(user_params)
       render json: lower_camelize_keys(user.as_json(except: except))

@@ -19,9 +19,11 @@ class ApplicationController < ActionController::API
 
   # 渡されたユーザーがカレントユーザーであればtrueを返す
   def current_user?(user)
-    return if (user.present? && user == current_user) || current_user.admin?
-
-    render json: {}, status: :unauthorized
+    if (user.present? && user == current_user) || current_user.admin?
+      true
+    else
+      false
+    end
   end
 
   # 管理者確認
@@ -29,10 +31,6 @@ class ApplicationController < ActionController::API
     return if current_user.admin?
 
     render json: {}, status: :unauthorized
-  end
-
-  def current_user_name
-    current_user.name
   end
 
   # ユーザーがログインしていればtrue、その他ならfalseを返す

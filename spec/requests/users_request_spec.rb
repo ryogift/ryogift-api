@@ -29,6 +29,23 @@ RSpec.describe "Users", type: :request do
           ]
         )
       end
+
+      example "ユーザーに権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+        user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: user.id }
+        )
+        get "/users"
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      example "ログインしていない場合にHTTPステータスが401 Unauthorizedであること" do
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: nil }
+        )
+        get "/users"
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
 
     describe "POST" do
@@ -85,7 +102,8 @@ RSpec.describe "Users", type: :request do
           }
         }
         post "/users", params: params
-        expect(JSON.parse(response.body)["passwordConfirmation"]).to eq(I18n.t("errors.messages.confirmation"))
+        result = JSON.parse(response.body, { symbolize_names: true })
+        expect(result[:passwordConfirmation]).to include(I18n.t("errors.messages.confirmation"))
       end
     end
   end
@@ -111,9 +129,20 @@ RSpec.describe "Users", type: :request do
           {
             id: @user1.id, name: @user1.name, email: @user1.email, displayState: @user1.display_state,
             displayRole: @user1.display_role, displayCreatedAt: @user1.display_created_at,
-            displayActivatedAt: @user1.display_activated_at, displayLockedAt: @user1.display_locked_at
+            displayActivatedAt: @user1.display_activated_at, displayLockedAt: @user1.display_locked_at,
+            admin: @user1.admin
           }
         )
+      end
+
+      example "指定したユーザーの権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+        user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+        user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com", admin: false)
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: user.id }
+        )
+        get "/users/#{user2.id}"
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -136,7 +165,18 @@ RSpec.describe "Users", type: :request do
 
       example "バリデーションエラー時にエラーメッセージが返却されること" do
         put "/users/#{@user1.id}", params: { user: { name: "" } }
-        expect(JSON.parse(response.body)["name"]).to eq(I18n.t("errors.messages.blank"))
+        result = JSON.parse(response.body, { symbolize_names: true })
+        expect(result[:name]).to include(I18n.t("errors.messages.blank"))
+      end
+
+      example "指定したユーザーの権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+        user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+        user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com", admin: false)
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: user.id }
+        )
+        put "/users/#{user2.id}", params: { user: { name: "test" } }
+        expect(response).to have_http_status(:unauthorized)
       end
 
       describe "/users/:id/lock" do
@@ -149,6 +189,15 @@ RSpec.describe "Users", type: :request do
           put "/users/#{@user1.id}/lock"
           @user1.reload
           expect(@user1.state_locked?).to eq true
+        end
+
+        example "ユーザーに権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+          user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+          allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+            { user_id: user.id }
+          )
+          put "/users/#{@user1.id}/lock"
+          expect(response).to have_http_status(:unauthorized)
         end
       end
 
@@ -167,6 +216,15 @@ RSpec.describe "Users", type: :request do
           user.reload
           expect(user.state_active?).to eq true
         end
+
+        example "ユーザーに権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+          user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+          allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+            { user_id: user.id }
+          )
+          put "/users/#{@user1.id}/lock"
+          expect(response).to have_http_status(:unauthorized)
+        end
       end
     end
 
@@ -174,6 +232,15 @@ RSpec.describe "Users", type: :request do
       example "HTTPステータスが204 No Contentであること" do
         delete "/users/#{@user1.id}"
         expect(response).to have_http_status(:no_content)
+      end
+
+      example "ユーザーに権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+        user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: user.id }
+        )
+        delete "/users/#{@user1.id}"
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

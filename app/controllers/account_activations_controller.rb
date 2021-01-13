@@ -5,10 +5,10 @@ class AccountActivationsController < ApplicationController
     if user.present? && user.state_inactive? && user.authenticated?(:activation, params[:id])
       user.activate
       log_in(user)
-      except = [:password_digest, :reset_digest, :activation_digest]
-      render json: lower_camelize_keys(user.as_json(except: except))
+      user_json = user.to_display_json
+      render json: lower_camelize_keys(user_json)
     else
-      error_message = "アカウントが有効になりませんでした。"
+      error_message = I18n.t("errors.display_message.account_activations.unauthorized")
       render json: response_error(error_message), status: :unauthorized
     end
   end

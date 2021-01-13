@@ -1,14 +1,14 @@
 class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:session][:email].downcase)
-    except = [:password_digest, :reset_digest, :activation_digest]
     if user.present? && user.authenticate(params[:session][:password])
       if user.state_locked?
         error_message = I18n.t("errors.display_message.auth.locked")
         render json: response_error(error_message), status: :locked
       elsif user.state_active?
         log_in user
-        render json: user.as_json(except: except), status: :ok
+        user_json = user.to_display_json
+        render json: lower_camelize_keys(user_json), status: :ok
       else
         error_message = I18n.t("errors.display_message.auth.forbidden")
         render json: response_error(error_message), status: :forbidden
