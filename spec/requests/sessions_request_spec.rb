@@ -128,4 +128,30 @@ RSpec.describe "Sessions", type: :request do
       expect(response).to have_http_status(:ok)
     end
   end
+
+  describe "/client_user" do
+    before do
+      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+        { user_id: @user.id }
+      )
+    end
+
+    example "HTTPステータスが200 OKであること" do
+      get "/client_user"
+      expect(response).to have_http_status(:ok)
+    end
+
+    example "ログイン済みのユーザー情報が取得できること" do
+      get "/client_user"
+      user = JSON.parse(response.body, { symbolize_names: true })
+      expect(user).to eq(
+        {
+          id: @user.id, name: @user.name, email: @user.email, displayState: @user.display_state,
+          displayRole: @user.display_role, displayCreatedAt: @user.display_created_at,
+          displayActivatedAt: @user.display_activated_at, displayLockedAt: @user.display_locked_at,
+          admin: @user.admin
+        }
+      )
+    end
+  end
 end

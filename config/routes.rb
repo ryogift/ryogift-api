@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
+  get "client_user", to: "sessions#client_user"
   resources :users do
     member do
       put "lock"
