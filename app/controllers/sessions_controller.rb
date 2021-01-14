@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  # POST /login
   def create
     user = User.find_by(email: params[:session][:email].downcase)
     if user.present? && user.authenticate(params[:session][:password])
@@ -19,9 +20,16 @@ class SessionsController < ApplicationController
     end
   end
 
+  # DELETE /logout
   def destroy
     log_out if logged_in?
     render json: {}, status: :ok
+  end
+
+  # GET /client_user
+  def client_user
+    user_json = current_user.to_display_json
+    render json: lower_camelize_keys(user_json)
   end
 
   private
