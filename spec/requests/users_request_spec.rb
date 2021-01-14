@@ -79,6 +79,28 @@ RSpec.describe "Users", type: :request do
         end.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
 
+      example "ユーザー作成後のユーザー情報が取得できること" do
+        params = {
+          user: {
+            name: "test",
+            email: "test@example.com",
+            password: "password",
+            password_confirmation: "password"
+          }
+        }
+        post "/users", params: params
+        user = JSON.parse(response.body, { symbolize_names: true })
+        create_user = User.find_by(email: "test@example.com")
+        expect(user).to eq(
+          {
+            id: create_user.id, name: create_user.name, email: create_user.email, displayState: create_user.display_state,
+            displayRole: create_user.display_role, displayCreatedAt: create_user.display_created_at,
+            displayActivatedAt: create_user.display_activated_at, displayLockedAt: create_user.display_locked_at,
+            admin: create_user.admin
+          }
+        )
+      end
+
       example "バリデーションエラー時にHTTPステータスが422 Unprocessable Entityであること" do
         params = {
           user: {
@@ -158,6 +180,20 @@ RSpec.describe "Users", type: :request do
         expect(user[:name]).to eq "test"
       end
 
+      example "更新後のユーザー情報が取得できること" do
+        put "/users/#{@user1.id}", params: { user: { name: "test" } }
+        user = JSON.parse(response.body, { symbolize_names: true })
+        @user1.reload
+        expect(user).to eq(
+          {
+            id: @user1.id, name: @user1.name, email: @user1.email, displayState: @user1.display_state,
+            displayRole: @user1.display_role, displayCreatedAt: @user1.display_created_at,
+            displayActivatedAt: @user1.display_activated_at, displayLockedAt: @user1.display_locked_at,
+            admin: @user1.admin
+          }
+        )
+      end
+
       example "バリデーションエラー時にHTTPステータスが422 Unprocessable Entityであること" do
         put "/users/#{@user1.id}", params: { user: { name: "" } }
         expect(response).to have_http_status(:unprocessable_entity)
@@ -224,6 +260,87 @@ RSpec.describe "Users", type: :request do
           )
           put "/users/#{@user1.id}/lock"
           expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      describe "/users/:id/update_password" do
+        example "HTTPステータスが200 OKであること" do
+          allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+            { user_id: @user1.id }
+          )
+          params = { user: { password: "password", password_confirmation: "password" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          expect(response).to have_http_status(:ok)
+        end
+
+        example "パスワードが更新できること" do
+          allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+            { user_id: @user1.id }
+          )
+          params = { user: { password: "password", password_confirmation: "password" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          @user1.reload
+          expect(@user1.authenticate("password").present?).to eq true
+        end
+
+        example "パスワード更新後にユーザー情報が取得できること" do
+          allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+            { user_id: @user1.id }
+          )
+          params = { user: { password: "password", password_confirmation: "password" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          user = JSON.parse(response.body, { symbolize_names: true })
+          expect(user).to eq(
+            {
+              id: @user1.id, name: @user1.name, email: @user1.email, displayState: @user1.display_state,
+              displayRole: @user1.display_role, displayCreatedAt: @user1.display_created_at,
+              displayActivatedAt: @user1.display_activated_at, displayLockedAt: @user1.display_locked_at,
+              admin: @user1.admin
+            }
+          )
+        end
+
+        example "バリデーションエラー時にHTTPステータスが422 Unprocessable Entityであること" do
+          params = { user: { password: "a", password_confirmation: "b" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        example "バリデーションエラー時にエラーメッセージが返却されること" do
+          params = { user: { password: "a", password_confirmation: "b" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          result = JSON.parse(response.body, { symbolize_names: true })
+          expect(result[:password]).to include(I18n.t("errors.messages.too_short", count: 6))
+        end
+
+        example "指定したユーザーの権限がない場合にHTTPステータスが401 Unauthorizedであること" do
+          user = FactoryBot.create(:user, name: "user", email: "user@example.com", admin: false)
+          user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com", admin: false)
+          allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+            { user_id: user.id }
+          )
+          params = { user: { password: "password", password_confirmation: "password" } }
+          put "/users/#{user2.id}/update_password", params: params
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        example "パスワードが空白の場合にエラーになること" do
+          params = { user: { password: "", password_confirmation: "password" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        example "パスワードの確認が空白の場合にエラーになること" do
+          params = { user: { password: "password", password_confirmation: "" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        example "パスワードが空白の場合にエラーメッセージを取得できること" do
+          params = { user: { password: "", password_confirmation: "password" } }
+          put "/users/#{@user1.id}/update_password", params: params
+          result = JSON.parse(response.body, { symbolize_names: true })
+          expect(result[:error][:message]).to eq I18n.t("errors.display_message.password_reset.blank")
         end
       end
     end
