@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     member do
       put "lock"
       put "unlock"
+      put "update_password"
     end
   end
   resources :account_activations, only: [:update]

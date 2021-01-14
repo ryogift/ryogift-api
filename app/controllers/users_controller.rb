@@ -23,7 +23,8 @@ class UsersController < ApplicationController
 
     if user.save
       user.send_activation_email
-      render(json: lower_camelize_keys(user.as_json(except: except)),
+      user_json = user.to_display_json
+      render(json: lower_camelize_keys(user_json),
              status: :created, location: user)
     else
       render json: lower_camelize_keys(user.errors.as_json), status: :unprocessable_entity
@@ -35,9 +36,9 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     return render json: {}, status: :unauthorized unless current_user?(user)
 
-    current_user?(user)
     if user.update(user_params)
-      render json: lower_camelize_keys(user.as_json(except: except))
+      user_json = user.to_display_json
+      render json: lower_camelize_keys(user_json)
     else
       render json: lower_camelize_keys(user.errors.as_json), status: :unprocessable_entity
     end
@@ -63,15 +64,27 @@ class UsersController < ApplicationController
     render json: {}
   end
 
+  # PUT /users/:id/update_password
+  def update_password
+    user = User.find(params[:id])
+    return render json: {}, status: :unauthorized unless current_user?(user)
+
+    if user_params[:password].blank? || user_params[:password_confirmation].blank?
+      error_message = I18n.t("errors.display_message.password_reset.blank")
+      render json: response_error(error_message), status: :unprocessable_entity
+    elsif user.update(user_params)
+      user_json = user.to_display_json
+      render json: lower_camelize_keys(user_json)
+    else
+      render json: lower_camelize_keys(user.errors.as_json), status: :unprocessable_entity
+    end
+  end
+
   private
 
   # 信頼できるパラメータ「ホワイトリスト」のみを許可する。
   def user_params
     params.require(:user).permit(:name, :email, :password,
                                  :password_confirmation)
-  end
-
-  def except
-    [:password_digest, :reset_digest, :activation_digest]
   end
 end
