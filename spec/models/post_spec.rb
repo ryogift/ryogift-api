@@ -44,27 +44,70 @@ RSpec.describe Post, type: :model do
   end
 
   describe "list_json" do
+    example "投稿一覧がJSON形式で取得できること" do
+      user = FactoryBot.create(:user)
+      post1 = FactoryBot.create(:post, user: user, content: "test1")
+      post2 = FactoryBot.create(:post, user: user, content: "test2")
+      posts_json = Post.list_json.map(&:deep_symbolize_keys)
+      expect(posts_json).to eq [
+        {
+          id: post2.id, content: post2.content, user_name: user.name,
+          display_updated_at: post2.display_updated_at, display_published_at: post2.display_published_at
+        },
+        {
+          id: post1.id, content: post1.content, user_name: user.name,
+          display_updated_at: post1.display_updated_at, display_published_at: post1.display_published_at
+        }
+      ]
+    end
+
+    example "投稿一覧が0件の場合に空の配列が返されること" do
+      posts_json = Post.list_json
+      expect(posts_json).to eq []
+    end
+  end
+
+  describe "user_list_json" do
     example "ユーザーの投稿一覧がJSON形式で取得できること" do
       user = FactoryBot.create(:user)
       post1 = FactoryBot.create(:post, user: user, content: "test1")
-      post2 = FactoryBot.create(:post, user: user, content: "test1")
-      posts_json = Post.list_json(user_id: user.id).map(&:deep_symbolize_keys)
+      post2 = FactoryBot.create(:post, user: user, content: "test2")
+      posts_json = Post.user_list_json(user_id: user.id).map(&:deep_symbolize_keys)
       expect(posts_json).to eq [
         {
-          id: post1.id, content: post1.content, state: post1.state, user_name: user.name,
-          display_updated_at: post1.display_updated_at, display_published_at: post1.display_published_at
+          id: post2.id, content: post2.content, user_name: user.name,
+          display_updated_at: post2.display_updated_at, display_published_at: post2.display_published_at
         },
         {
-          id: post2.id, content: post2.content, state: post2.state, user_name: user.name,
-          display_updated_at: post2.display_updated_at, display_published_at: post2.display_published_at
+          id: post1.id, content: post1.content, user_name: user.name,
+          display_updated_at: post1.display_updated_at, display_published_at: post1.display_published_at
         }
       ]
     end
 
     example "ユーザーの投稿一覧が0件の場合に空の配列が返されること" do
       user = FactoryBot.create(:user)
-      posts_json = Post.list_json(user_id: user.id)
+      posts_json = Post.user_list_json(user_id: user.id)
       expect(posts_json).to eq []
+    end
+  end
+
+  describe "find_post_json" do
+    example "ユーザーの投稿がJSON形式で取得できること" do
+      user = FactoryBot.create(:user)
+      post = FactoryBot.create(:post, user: user, content: "test1")
+      post_json = Post.find_post_json(post_id: post.id).deep_symbolize_keys
+      expect(post_json).to eq(
+        {
+          id: post.id, content: post.content, user_name: user.name,
+          display_updated_at: post.display_updated_at, display_published_at: post.display_published_at
+        }
+      )
+    end
+
+    example "ユーザーの投稿が見つからない場合に結果が空であること" do
+      post_json = Post.find_post_json(post_id: -1)
+      expect(post_json.blank?).to eq true
     end
   end
 
@@ -75,7 +118,7 @@ RSpec.describe Post, type: :model do
       post_json = Post.find_user_post_json(user_id: user.id, post_id: post.id).deep_symbolize_keys
       expect(post_json).to eq(
         {
-          id: post.id, content: post.content, state: post.state, user_name: user.name,
+          id: post.id, content: post.content, user_name: user.name,
           display_updated_at: post.display_updated_at, display_published_at: post.display_published_at
         }
       )

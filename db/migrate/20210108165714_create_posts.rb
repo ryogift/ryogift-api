@@ -3,7 +3,6 @@ class CreatePosts < ActiveRecord::Migration[6.0]
     create_table :posts do |t|
       t.references :user, null: false
       t.string :content
-      t.integer :state
       t.datetime :published_at
 
       t.timestamps
