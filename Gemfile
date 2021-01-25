@@ -17,7 +17,7 @@ group :development, :test do
   gem "pry-rails"
   gem "rspec-rails"
   gem "factory_bot_rails"
-  gem "simplecov", "0.18.5", require: false
+  gem "simplecov", "0.21.2", require: false
 end
 
 group :development do
