@@ -1,0 +1,12 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=e2ca993c4bcda4f766cd71566e224de37c084c49bf282c70dbcd8133c01f03af
+language: ruby
+rvm: 2.7.0
+services: postgresql
+bundler_args: "--without development --deployment -j4"
+cache: bundler
+before_script:
+  - cp config/database.travis.yml config/database.yml
+  - bundle exec rails db:setup
+script: bundle exec rspec
