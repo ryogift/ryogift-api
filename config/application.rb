@@ -22,15 +22,18 @@ Bundler.require(*Rails.groups)
 module RyogiftApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
     config.i18n.default_locale = :ja
     config.time_zone = "Asia/Tokyo"
     config.active_record.default_timezone = :local
 
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration can go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded after loading
-    # the framework and any gems in your application.
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
@@ -41,17 +44,6 @@ module RyogiftApi
                                helper_specs: false,
                                routing_specs: false
     end
-
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins "http://localhost:3001"
-        resource "*",
-          headers: :any,
-          methods: [:get, :post, :put, :patch, :delete, :options, :head],
-          credentials: true
-      end
-    end
-
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
   end

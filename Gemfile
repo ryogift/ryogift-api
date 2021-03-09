@@ -1,19 +1,19 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "2.7.0"
+ruby "3.0.0"
 
-gem "rails", "6.0.3.4"
+gem "rails", "6.1.3"
 gem "pg", "1.2.3"
-gem "puma", "4.3.7"
-gem "jbuilder", "2.10.0"
+gem "puma", "5.2.2"
+gem "jbuilder", "2.11.2"
 gem "bcrypt", "3.1.16"
-gem "bootsnap", "1.4.8", require: false
+gem "bootsnap", "1.7.2", require: false
 gem "rack-cors", "1.1.1"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
-  gem "rubocop", "0.89.1", require: false
+  gem "rubocop", "1.11.0", require: false
   gem "pry-rails"
   gem "rspec-rails"
   gem "factory_bot_rails"
