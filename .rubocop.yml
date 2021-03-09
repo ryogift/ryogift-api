@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.0
   Exclude:
     - bin/*
     - db/schema.rb
@@ -7,12 +7,16 @@ AllCops:
     - vendor/**/*
     - config/**/*
     - lib/tasks/*
+Gemspec/DateAssignment:
+  Enabled: true
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
 Layout/SpaceAroundMethodCallOperator:
   Enabled: true
 Layout/LineLength:
   Enabled: false
+Layout/SpaceBeforeBrackets:
+  Enabled: true
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
 Lint/MixedRegexpCaptureTypes:
@@ -40,6 +44,38 @@ Lint/SelfAssignment:
 Lint/TopLevelReturnWithArgument:
   Enabled: true
 Lint/UnreachableLoop:
+  Enabled: true
+Lint/AmbiguousAssignment:
+  Enabled: true
+Lint/DeprecatedConstants:
+  Enabled: true
+Lint/DuplicateBranch:
+  Enabled: true
+Lint/DuplicateRegexpCharacterClassElement:
+  Enabled: true
+Lint/EmptyBlock:
+  Enabled: true
+Lint/EmptyClass:
+  Enabled: true
+Lint/LambdaWithoutLiteralBlock:
+  Enabled: true
+Lint/NoReturnInBeginEndBlocks:
+  Enabled: true
+Lint/NumberedParameterAssignment:
+  Enabled: true
+Lint/OrAssignmentToConstant:
+  Enabled: true
+Lint/RedundantDirGlobSort:
+  Enabled: true
+Lint/SymbolConversion:
+  Enabled: true
+Lint/ToEnumArguments:
+  Enabled: true
+Lint/TripleQuotes:
+  Enabled: true
+Lint/UnexpectedBlockArity:
+  Enabled: true
+Lint/UnmodifiedReduceAccumulator:
   Enabled: true
 Style/ExponentialNotation:
   Enabled: true
@@ -101,6 +137,28 @@ Style/Documentation:
   Enabled: false
 Style/ParenthesesAroundCondition:
   Enabled: false
+Style/ArgumentsForwarding:
+  Enabled: true
+Style/CollectionCompact:
+  Enabled: true
+Style/DocumentDynamicEvalDefinition:
+  Enabled: true
+Style/EndlessMethod:
+  Enabled: true
+Style/HashConversion:
+  Enabled: true
+Style/HashExcept:
+  Enabled: true
+Style/IfWithBooleanLiteralBranches:
+  Enabled: true
+Style/NegatedIfElseCondition:
+  Enabled: true
+Style/NilLambda:
+  Enabled: true
+Style/RedundantArgument:
+  Enabled: true
+Style/SwapValues:
+  Enabled: true
 Bundler/OrderedGems:
   Enabled: false
 Metrics/AbcSize:
