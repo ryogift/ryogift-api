@@ -53,9 +53,9 @@ class ApplicationController < ActionController::API
 
   def lower_camelize_keys(object)
     if object.is_a?(Array)
-      object.map { |item| item.to_h { |k, v| [k.to_s.camelize(:lower).to_sym, v] } }
+      object.map { |item| item.transform_keys { |k| k.to_s.camelize(:lower).to_sym } }
     else
-      object.to_h { |k, v| [k.to_s.camelize(:lower).to_sym, v] }
+      object.transform_keys { |k| k.to_s.camelize(:lower).to_sym }
     end
   end
 end
