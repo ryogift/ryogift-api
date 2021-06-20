@@ -6,6 +6,8 @@ language: ruby
 rvm: 3.0.0
 services: postgresql
 cache: bundler
+before_install:
+  - gem install bundler:2.2.20
 before_script:
   - cp config/database.travis.yml config/database.yml
   - bundle exec rails db:setup
