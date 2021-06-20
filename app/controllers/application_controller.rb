@@ -19,11 +19,7 @@ class ApplicationController < ActionController::API
 
   # 渡されたユーザーがカレントユーザーであればtrueを返す
   def current_user?(user)
-    if (user.present? && user == current_user) || current_user.admin?
-      true
-    else
-      false
-    end
+    (user.present? && user == current_user) || current_user.admin?
   end
 
   # 管理者確認
