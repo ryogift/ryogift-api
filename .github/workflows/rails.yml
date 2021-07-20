@@ -16,23 +16,24 @@ on:
     branches: [ main ]
 
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:12
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    container:
-      image: ruby:3.0.0
-      env:
-        RAILS_ENV: test
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
+      - name: Setup Ruby
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 3.0.0
+      - name: Install dependent libraries
+        run: sudo apt-get install libpq-dev
       - name: Cache bundle gems
         uses: actions/cache@v2
         with:
@@ -48,5 +49,9 @@ jobs:
         run: bundle install --path=vendor/bundle --jobs 4 --retry 3
       - name: DB setup
         run: bundle exec rails db:setup
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
       - name: Run rspec
         run: bundle exec rails test
