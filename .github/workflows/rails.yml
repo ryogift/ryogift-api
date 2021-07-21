@@ -54,4 +54,4 @@ jobs:
       - name: DB setup
         run: bundle exec rails db:setup
       - name: Run rspec
-        run: bundle exec rails test
+        run: bundle exec rspec
