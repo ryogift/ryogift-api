@@ -6,7 +6,6 @@ ruby "3.0.2"
 gem "rails", "6.1.4.1"
 gem "pg", "1.2.3"
 gem "puma", "5.2.2"
-gem "jbuilder", "2.11.2"
 gem "bcrypt", "3.1.16"
 gem "bootsnap", "1.7.2", require: false
 gem "rack-cors", "1.1.1"
