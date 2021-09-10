@@ -1,5 +1,4 @@
 require "rails_helper"
-include ActiveJob::TestHelper
 
 RSpec.describe "PasswordResets", type: :request do
   before do

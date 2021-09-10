@@ -1,5 +1,4 @@
 require "rails_helper"
-include ActiveJob::TestHelper
 
 RSpec.describe User, type: :model do
   example "有効なファクトリを持つこと" do

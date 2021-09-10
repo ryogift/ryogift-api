@@ -1,5 +1,4 @@
 require "rails_helper"
-include ActiveJob::TestHelper
 
 RSpec.describe "Users", type: :request do
   describe "/users" do

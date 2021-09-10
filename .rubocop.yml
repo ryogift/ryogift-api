@@ -7,92 +7,12 @@ AllCops:
     - vendor/**/*
     - config/**/*
     - lib/tasks/*
-Gemspec/DateAssignment:
-  Enabled: true
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
+  NewCops: enable
+  SuggestExtensions: false
 Layout/LineLength:
   Enabled: false
-Layout/SpaceBeforeBrackets:
-  Enabled: true
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true
-Lint/DuplicateElsifCondition:
-  Enabled: true
-Lint/BinaryOperatorWithIdenticalOperands:
-  Enabled: true
-Lint/DuplicateRescueException:
-  Enabled: true
-Lint/EmptyConditionalBody:
-  Enabled: true
-Lint/FloatComparison:
-  Enabled: true
-Lint/MissingSuper:
-  Enabled: true
-Lint/OutOfRangeRegexpRef:
-  Enabled: true
-Lint/SelfAssignment:
-  Enabled: true
-Lint/TopLevelReturnWithArgument:
-  Enabled: true
-Lint/UnreachableLoop:
-  Enabled: true
-Lint/AmbiguousAssignment:
-  Enabled: true
-Lint/DeprecatedConstants:
-  Enabled: true
-Lint/DuplicateBranch:
-  Enabled: true
-Lint/DuplicateRegexpCharacterClassElement:
-  Enabled: true
-Lint/EmptyBlock:
-  Enabled: true
-Lint/EmptyClass:
-  Enabled: true
-Lint/LambdaWithoutLiteralBlock:
-  Enabled: true
-Lint/NoReturnInBeginEndBlocks:
-  Enabled: true
-Lint/NumberedParameterAssignment:
-  Enabled: true
-Lint/OrAssignmentToConstant:
-  Enabled: true
-Lint/RedundantDirGlobSort:
-  Enabled: true
-Lint/SymbolConversion:
-  Enabled: true
-Lint/ToEnumArguments:
-  Enabled: true
-Lint/TripleQuotes:
-  Enabled: true
-Lint/UnexpectedBlockArity:
-  Enabled: true
-Lint/UnmodifiedReduceAccumulator:
-  Enabled: true
-Style/ExponentialNotation:
-  Enabled: true
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Style/RedundantFetchBlock:
-  Enabled: true
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-Style/RedundantRegexpEscape:
-  Enabled: true
-Style/SlicingWithRange:
-  Enabled: true
+Layout/CommentIndentation:
+  Enabled: false
 Style/StringLiterals:
   EnforcedStyle: "double_quotes"
 Style/FrozenStringLiteralComment:
@@ -107,58 +27,10 @@ Style/WordArray:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
-Style/AccessorGrouping:
-  Enabled: true
-Style/ArrayCoercion:
-  Enabled: true
-Style/BisectedAttrAccessor:
-  Enabled: true
-Style/CaseLikeIf:
-  Enabled: true
-Style/HashAsLastArrayItem:
-  Enabled: true
-Style/HashLikeCase:
-  Enabled: true
-Style/RedundantAssignment:
-  Enabled: true
-Style/RedundantFileExtensionInRequire:
-  Enabled: true
-Style/ExplicitBlockArgument:
-  Enabled: true
-Style/GlobalStdStream:
-  Enabled: true
-Style/OptionalBooleanParameter:
-  Enabled: true
-Style/SingleArgumentDig:
-  Enabled: true
-Style/StringConcatenation:
-  Enabled: true
 Style/Documentation:
   Enabled: false
 Style/ParenthesesAroundCondition:
   Enabled: false
-Style/ArgumentsForwarding:
-  Enabled: true
-Style/CollectionCompact:
-  Enabled: true
-Style/DocumentDynamicEvalDefinition:
-  Enabled: true
-Style/EndlessMethod:
-  Enabled: true
-Style/HashConversion:
-  Enabled: true
-Style/HashExcept:
-  Enabled: true
-Style/IfWithBooleanLiteralBranches:
-  Enabled: true
-Style/NegatedIfElseCondition:
-  Enabled: true
-Style/NilLambda:
-  Enabled: true
-Style/RedundantArgument:
-  Enabled: true
-Style/SwapValues:
-  Enabled: true
 Bundler/OrderedGems:
   Enabled: false
 Metrics/AbcSize:
