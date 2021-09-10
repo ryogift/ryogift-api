@@ -1,16 +1,3 @@
-require "simplecov"
-
-SimpleCov.profiles.define "myprofile" do
-  add_filter "/config/"
-  add_filter "/spec/"
-
-  add_group "Controllers", "app/controllers"
-  add_group "Models", "app/models"
-  add_group "Libraries", "lib"
-end
-
-SimpleCov.start "myprofile"
-
 require "spec_helper"
 ENV["RAILS_ENV"] = "test"
 require File.expand_path("../config/environment", __dir__)
