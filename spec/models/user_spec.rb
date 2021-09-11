@@ -1,7 +1,8 @@
 require "rails_helper"
-include ActiveJob::TestHelper
 
 RSpec.describe User, type: :model do
+  include ActiveJob::TestHelper
+
   example "有効なファクトリを持つこと" do
     expect(FactoryBot.build(:user)).to be_valid
   end
