@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root to: "top#index"
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
   get "client_user", to: "sessions#client_user"
