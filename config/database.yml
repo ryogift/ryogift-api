@@ -8,8 +8,8 @@ development:
   database: ryogift_api_development
 test:
   <<: *default
-  database: ryogift_api_test
-  host: <%= ENV["RAILS_DATABASE_HOST"] %>
+  database: ryogift_api_test<%= ENV["TEST_ENV_NUMBER"] %>
+  host: <%= ENV.fetch("RAILS_DATABASE_HOST") { "localhost" } %>
   username: <%= ENV["POSTGRES_USER"] %>
   password: <%= ENV["POSTGRES_PASSWORD"] %>
 production:
