@@ -52,4 +52,4 @@ jobs:
       - name: DB setup (parallel)
         run: bundle exec rails parallel:setup
       - name: Run rspec (parallel)
-        run: bundle exec parallel:spec
+        run: bundle exec rails parallel:spec
