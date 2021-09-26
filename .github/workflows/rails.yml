@@ -49,7 +49,7 @@ jobs:
         run: gem install bundler --no-document -v $(grep "BUNDLED WITH" -1 Gemfile.lock | tail -n 1)
       - name: Bundle install
         run: bundle install --path=vendor/bundle --jobs 4 --retry 3
-      - name: DB setup
-        run: bundle exec rails db:setup
-      - name: Run rspec
-        run: bundle exec rspec
+      - name: DB setup (parallel)
+        run: bundle exec rails parallel:setup
+      - name: Run rspec (parallel)
+        run: bundle exec parallel:spec
