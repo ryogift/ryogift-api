@@ -12,7 +12,7 @@ gem "rack-cors", "1.1.1"
 
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
-  gem "rubocop", "1.22.1", require: false
+  gem "rubocop", "1.22.3", require: false
   gem "pry-rails"
   gem "rspec-rails"
   gem "factory_bot_rails"
