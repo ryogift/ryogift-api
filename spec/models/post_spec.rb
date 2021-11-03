@@ -21,7 +21,7 @@ RSpec.describe Post, type: :model do
 
   describe "display_updated_at" do
     example "表示用の更新日が返されること" do
-      post = FactoryBot.create(:post)
+      post = FactoryBot.build_stubbed(:post)
       expect(post.display_updated_at).to eq post.updated_at.strftime("%Y/%m/%d %T")
     end
 
@@ -33,7 +33,7 @@ RSpec.describe Post, type: :model do
 
   describe "display_published_at" do
     example "表示用の公開日が返されること" do
-      post = FactoryBot.create(:post, published_at: Time.zone.now)
+      post = FactoryBot.build(:post, published_at: Time.zone.now)
       expect(post.display_published_at).to eq post.published_at.strftime("%Y/%m/%d %T")
     end
 
@@ -86,7 +86,7 @@ RSpec.describe Post, type: :model do
     end
 
     example "ユーザーの投稿一覧が0件の場合に空の配列が返されること" do
-      user = FactoryBot.create(:user)
+      user = FactoryBot.build_stubbed(:user)
       posts_json = Post.user_list_json(user_id: user.id)
       expect(posts_json).to eq []
     end
@@ -125,7 +125,7 @@ RSpec.describe Post, type: :model do
     end
 
     example "ユーザーの投稿が見つからない場合に結果が空であること" do
-      user = FactoryBot.create(:user)
+      user = FactoryBot.build_stubbed(:user)
       post_json = Post.find_user_post_json(user_id: user.id, post_id: -1)
       expect(post_json.blank?).to eq true
     end
