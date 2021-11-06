@@ -2,22 +2,23 @@ require "rails_helper"
 
 RSpec.describe "Users", type: :request do
   describe "/users" do
-    before do
-      @admin_user = FactoryBot.create(:user, admin: true)
-      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
-        { user_id: @admin_user.id }
-      )
-      @user1 = FactoryBot.create(:user, name: "user1", email: "user1@example.com")
-      @user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com")
-    end
-
     describe "GET" do
       example "HTTPステータスが200 OKであること" do
+        @admin_user = FactoryBot.create(:user, admin: true)
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: @admin_user.id }
+        )
         get "/users"
         expect(response).to have_http_status(:ok)
       end
 
       example "ユーザー 一覧が取得できること" do
+        @admin_user = FactoryBot.create(:user, admin: true)
+        allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
+          { user_id: @admin_user.id }
+        )
+        @user1 = FactoryBot.create(:user, name: "user1", email: "user1@example.com")
+        @user2 = FactoryBot.create(:user, name: "user2", email: "user2@example.com")
         get "/users"
         users = JSON.parse(response.body, { symbolize_names: true })
         expect(users).to eq(
