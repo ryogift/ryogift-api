@@ -204,6 +204,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    stackprof (0.2.17)
+    test-prof (1.0.7)
     thor (1.1.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -235,6 +237,8 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen
+  stackprof
+  test-prof
 
 RUBY VERSION
    ruby 3.0.2p107

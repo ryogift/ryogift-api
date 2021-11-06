@@ -26,3 +26,8 @@ group :development do
   gem "spring-commands-rspec"
   gem "letter_opener_web"
 end
+
+group :test do
+  gem "test-prof"
+  gem "stackprof", require: false
+end
