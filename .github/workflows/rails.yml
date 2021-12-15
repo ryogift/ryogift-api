@@ -32,7 +32,6 @@ jobs:
         RAILS_DATABASE_HOST: postgres
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
-        RYOGIFT_CLIENT_URL: https://ryo.gift
     steps:
       - name: checkout
         uses: actions/checkout@v2
