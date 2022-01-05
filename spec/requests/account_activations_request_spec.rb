@@ -13,7 +13,7 @@ RSpec.describe "AccountActivations", type: :request do
             email: @user.email
           }
         }
-        put "/account_activations/#{@user.activation_token}", params: params
+        put("/account_activations/#{@user.activation_token}", params:)
         expect(response).to have_http_status(:ok)
       end
 
@@ -23,7 +23,7 @@ RSpec.describe "AccountActivations", type: :request do
             email: @user.email
           }
         }
-        put "/account_activations/#{@user.activation_token}", params: params
+        put("/account_activations/#{@user.activation_token}", params:)
         @user.reload
         expect(@user.state_active?).to eq true
       end
@@ -34,7 +34,7 @@ RSpec.describe "AccountActivations", type: :request do
             email: @user.email
           }
         }
-        put "/account_activations/#{@user.activation_token}", params: params
+        put("/account_activations/#{@user.activation_token}", params:)
         expect(session[:user_id]).to eq @user.id
       end
 
@@ -44,7 +44,7 @@ RSpec.describe "AccountActivations", type: :request do
             email: @user.email
           }
         }
-        put "/account_activations/#{@user.activation_token}", params: params
+        put("/account_activations/#{@user.activation_token}", params:)
         user = JSON.parse(response.body, { symbolize_names: true })
         @user.reload
         expect(user).to eq(
@@ -64,7 +64,7 @@ RSpec.describe "AccountActivations", type: :request do
               email: @user.email
             }
           }
-          put "/account_activations/test", params: params
+          put("/account_activations/test", params:)
           expect(response).to have_http_status(:unauthorized)
         end
 
@@ -74,7 +74,7 @@ RSpec.describe "AccountActivations", type: :request do
               email: @user.email
             }
           }
-          put "/account_activations/test", params: params
+          put("/account_activations/test", params:)
           @user.reload
           expect(@user.state_active?).to eq false
         end
@@ -85,7 +85,7 @@ RSpec.describe "AccountActivations", type: :request do
               email: @user.email
             }
           }
-          put "/account_activations/test", params: params
+          put("/account_activations/test", params:)
           error_message = I18n.t("errors.display_message.account_activations.unauthorized")
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:error][:message]).to eq error_message

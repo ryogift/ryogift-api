@@ -65,7 +65,7 @@ class User < ApplicationRecord
     users = all.order(:id)
     only = [:id, :name, :email, :display_state]
     methods = [:display_state]
-    users.as_json(methods: methods, only: only)
+    users.as_json(methods:, only:)
   end
 
   def display_role
@@ -90,7 +90,7 @@ class User < ApplicationRecord
             :display_created_at, :display_activated_at, :display_locked_at, :admin]
     methods = [:display_state, :display_role, :display_created_at,
                :display_activated_at, :display_locked_at]
-    as_json(methods: methods, only: only)
+    as_json(methods:, only:)
   end
 
   def lock

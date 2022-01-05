@@ -42,7 +42,7 @@ RSpec.describe "UserPosts", type: :request do
             content: "test"
           }
         }
-        post "/user_posts", params: params
+        post("/user_posts", params:)
         expect(response).to have_http_status(:created)
       end
 
@@ -52,7 +52,7 @@ RSpec.describe "UserPosts", type: :request do
             content: ""
           }
         }
-        post "/user_posts", params: params
+        post("/user_posts", params:)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
@@ -62,7 +62,7 @@ RSpec.describe "UserPosts", type: :request do
             content: ""
           }
         }
-        post "/user_posts", params: params
+        post("/user_posts", params:)
         result = JSON.parse(response.body, { symbolize_names: true })
         expect(result[:content]).to include(I18n.t("errors.messages.blank"))
       end

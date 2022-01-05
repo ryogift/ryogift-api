@@ -58,7 +58,7 @@ RSpec.describe "Users", type: :request do
             password_confirmation: "password"
           }
         }
-        post "/users", params: params
+        post("/users", params:)
         expect(response).to have_http_status(:created)
       end
 
@@ -74,7 +74,7 @@ RSpec.describe "Users", type: :request do
         ActiveJob::Base.queue_adapter = :test
         expect do
           perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
-            post "/users", params: params
+            post("/users", params:)
           end
         end.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
@@ -88,7 +88,7 @@ RSpec.describe "Users", type: :request do
             password_confirmation: "password"
           }
         }
-        post "/users", params: params
+        post("/users", params:)
         user = JSON.parse(response.body, { symbolize_names: true })
         create_user = User.find_by(email: "test@example.com")
         expect(user).to eq(
@@ -110,7 +110,7 @@ RSpec.describe "Users", type: :request do
             password_confirmation: "password1"
           }
         }
-        post "/users", params: params
+        post("/users", params:)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
@@ -123,7 +123,7 @@ RSpec.describe "Users", type: :request do
             password_confirmation: "password1"
           }
         }
-        post "/users", params: params
+        post("/users", params:)
         result = JSON.parse(response.body, { symbolize_names: true })
         expect(result[:passwordConfirmation]).to include(I18n.t("errors.messages.confirmation"))
       end
@@ -269,7 +269,7 @@ RSpec.describe "Users", type: :request do
             { user_id: @user1.id }
           )
           params = { user: { password: "password", password_confirmation: "password" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           expect(response).to have_http_status(:ok)
         end
 
@@ -278,7 +278,7 @@ RSpec.describe "Users", type: :request do
             { user_id: @user1.id }
           )
           params = { user: { password: "password", password_confirmation: "password" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           @user1.reload
           expect(@user1.authenticate("password").present?).to eq true
         end
@@ -288,7 +288,7 @@ RSpec.describe "Users", type: :request do
             { user_id: @user1.id }
           )
           params = { user: { password: "password", password_confirmation: "password" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           user = JSON.parse(response.body, { symbolize_names: true })
           expect(user).to eq(
             {
@@ -302,13 +302,13 @@ RSpec.describe "Users", type: :request do
 
         example "バリデーションエラー時にHTTPステータスが422 Unprocessable Entityであること" do
           params = { user: { password: "a", password_confirmation: "b" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         example "バリデーションエラー時にエラーメッセージが返却されること" do
           params = { user: { password: "a", password_confirmation: "b" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:password]).to include(I18n.t("errors.messages.too_short", count: 6))
         end
@@ -320,25 +320,25 @@ RSpec.describe "Users", type: :request do
             { user_id: user.id }
           )
           params = { user: { password: "password", password_confirmation: "password" } }
-          put "/users/#{user2.id}/update_password", params: params
+          put("/users/#{user2.id}/update_password", params:)
           expect(response).to have_http_status(:unauthorized)
         end
 
         example "パスワードが空白の場合にエラーになること" do
           params = { user: { password: "", password_confirmation: "password" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         example "パスワードの確認が空白の場合にエラーになること" do
           params = { user: { password: "password", password_confirmation: "" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         example "パスワードが空白の場合にエラーメッセージを取得できること" do
           params = { user: { password: "", password_confirmation: "password" } }
-          put "/users/#{@user1.id}/update_password", params: params
+          put("/users/#{@user1.id}/update_password", params:)
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:error][:message]).to eq I18n.t("errors.display_message.password_reset.blank")
         end

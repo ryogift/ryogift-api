@@ -13,7 +13,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       expect(response).to have_http_status(:ok)
     end
 
@@ -24,7 +24,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       user = JSON.parse(response.body, { symbolize_names: true })
       expect(user).to eq(
         {
@@ -44,7 +44,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       expect(response).to have_http_status(:forbidden)
     end
 
@@ -56,7 +56,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       error_message = I18n.t("errors.display_message.auth.forbidden")
       result = JSON.parse(response.body, { symbolize_names: true })
       expect(result[:error][:message]).to eq error_message
@@ -69,7 +69,7 @@ RSpec.describe "Sessions", type: :request do
           password: "test"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       expect(response).to have_http_status(:unauthorized)
     end
 
@@ -80,7 +80,7 @@ RSpec.describe "Sessions", type: :request do
           password: "test"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       error_message = I18n.t("errors.display_message.auth.unauthorized")
       result = JSON.parse(response.body, { symbolize_names: true })
       expect(result[:error][:message]).to eq error_message
@@ -95,7 +95,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       expect(response).to have_http_status(:locked)
     end
 
@@ -108,7 +108,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       error_message = I18n.t("errors.display_message.auth.locked")
       result = JSON.parse(response.body, { symbolize_names: true })
       expect(result[:error][:message]).to eq error_message
@@ -123,7 +123,7 @@ RSpec.describe "Sessions", type: :request do
           password: "password"
         }
       }
-      post "/login", params: params
+      post("/login", params:)
       delete "/logout"
       expect(response).to have_http_status(:ok)
     end

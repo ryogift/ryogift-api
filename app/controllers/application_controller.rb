@@ -43,7 +43,7 @@ class ApplicationController < ActionController::API
 
   def response_error(message)
     {
-      error: { message: message }
+      error: { message: }
     }.to_json
   end
 

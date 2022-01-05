@@ -46,8 +46,8 @@ RSpec.describe Post, type: :model do
   describe "list_json" do
     example "投稿一覧がJSON形式で取得できること" do
       user = FactoryBot.create(:user)
-      post1 = FactoryBot.create(:post, user: user, content: "test1")
-      post2 = FactoryBot.create(:post, user: user, content: "test2")
+      post1 = FactoryBot.create(:post, user:, content: "test1")
+      post2 = FactoryBot.create(:post, user:, content: "test2")
       posts_json = Post.list_json.map(&:deep_symbolize_keys)
       expect(posts_json).to eq [
         {
@@ -70,8 +70,8 @@ RSpec.describe Post, type: :model do
   describe "user_list_json" do
     example "ユーザーの投稿一覧がJSON形式で取得できること" do
       user = FactoryBot.create(:user)
-      post1 = FactoryBot.create(:post, user: user, content: "test1")
-      post2 = FactoryBot.create(:post, user: user, content: "test2")
+      post1 = FactoryBot.create(:post, user:, content: "test1")
+      post2 = FactoryBot.create(:post, user:, content: "test2")
       posts_json = Post.user_list_json(user_id: user.id).map(&:deep_symbolize_keys)
       expect(posts_json).to eq [
         {
@@ -95,7 +95,7 @@ RSpec.describe Post, type: :model do
   describe "find_post_json" do
     example "ユーザーの投稿がJSON形式で取得できること" do
       user = FactoryBot.create(:user)
-      post = FactoryBot.create(:post, user: user, content: "test1")
+      post = FactoryBot.create(:post, user:, content: "test1")
       post_json = Post.find_post_json(post_id: post.id).deep_symbolize_keys
       expect(post_json).to eq(
         {
@@ -114,7 +114,7 @@ RSpec.describe Post, type: :model do
   describe "find_user_post_json" do
     example "ユーザーの投稿がJSON形式で取得できること" do
       user = FactoryBot.create(:user)
-      post = FactoryBot.create(:post, user: user, content: "test1")
+      post = FactoryBot.create(:post, user:, content: "test1")
       post_json = Post.find_user_post_json(user_id: user.id, post_id: post.id).deep_symbolize_keys
       expect(post_json).to eq(
         {

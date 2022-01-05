@@ -13,7 +13,7 @@ RSpec.describe "PasswordResets", type: :request do
             email: @user.email
           }
         }
-        post "/password_resets", params: params
+        post("/password_resets", params:)
         expect(response).to have_http_status(:ok)
       end
 
@@ -26,7 +26,7 @@ RSpec.describe "PasswordResets", type: :request do
         ActiveJob::Base.queue_adapter = :test
         expect do
           perform_enqueued_jobs(only: ActionMailer::MailDeliveryJob) do
-            post "/password_resets", params: params
+            post("/password_resets", params:)
           end
         end.to change(ActionMailer::Base.deliveries, :count).by(1)
       end
@@ -38,7 +38,7 @@ RSpec.describe "PasswordResets", type: :request do
               email: "test@example.com"
             }
           }
-          post "/password_resets", params: params
+          post("/password_resets", params:)
           expect(response).to have_http_status(:not_found)
         end
 
@@ -48,7 +48,7 @@ RSpec.describe "PasswordResets", type: :request do
               email: "test@example.com"
             }
           }
-          post "/password_resets", params: params
+          post("/password_resets", params:)
           expect(response).to have_http_status(:not_found)
         end
 
@@ -58,7 +58,7 @@ RSpec.describe "PasswordResets", type: :request do
               email: "test@example.com"
             }
           }
-          post "/password_resets", params: params
+          post("/password_resets", params:)
           error_message = I18n.t("errors.display_message.password_reset.not_found")
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:error][:message]).to eq error_message
@@ -78,7 +78,7 @@ RSpec.describe "PasswordResets", type: :request do
             password_confirmation: "password"
           }
         }
-        put "/password_resets/#{@user.reset_token}", params: params
+        put("/password_resets/#{@user.reset_token}", params:)
         expect(response).to have_http_status(:ok)
       end
 
@@ -91,7 +91,7 @@ RSpec.describe "PasswordResets", type: :request do
             password_confirmation: "test1234"
           }
         }
-        put "/password_resets/#{@user.reset_token}", params: params
+        put("/password_resets/#{@user.reset_token}", params:)
         @user.reload
         expect(@user.authenticate("test1234").present?).to eq true
       end
@@ -106,7 +106,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: ""
             }
           }
-          put "/password_resets/#{@user.reset_token}", params: params
+          put("/password_resets/#{@user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -119,7 +119,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: ""
             }
           }
-          put "/password_resets/#{@user.reset_token}", params: params
+          put("/password_resets/#{@user.reset_token}", params:)
           error_message = I18n.t("errors.display_message.password_reset.blank")
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:error][:message]).to eq error_message
@@ -134,7 +134,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{@user.reset_token}", params: params
+          put("/password_resets/#{@user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -147,7 +147,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: ""
             }
           }
-          put "/password_resets/#{@user.reset_token}", params: params
+          put("/password_resets/#{@user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
@@ -162,7 +162,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "test1234"
             }
           }
-          put "/password_resets/#{@user.reset_token}", params: params
+          put("/password_resets/#{@user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -175,7 +175,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "test1234"
             }
           }
-          put "/password_resets/#{@user.reset_token}", params: params
+          put("/password_resets/#{@user.reset_token}", params:)
           error_message = I18n.t("errors.messages.confirmation")
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:passwordConfirmation]).to include(error_message)
@@ -193,7 +193,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{user.reset_token}", params: params
+          put("/password_resets/#{user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -207,7 +207,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{user.reset_token}", params: params
+          put("/password_resets/#{user.reset_token}", params:)
           error_message = I18n.t("errors.display_message.password_reset.invalid")
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:error][:message]).to eq error_message
@@ -223,7 +223,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{user.reset_token}", params: params
+          put("/password_resets/#{user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -237,7 +237,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{user.reset_token}", params: params
+          put("/password_resets/#{user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -251,7 +251,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/test", params: params
+          put("/password_resets/test", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
@@ -268,7 +268,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{user.reset_token}", params: params
+          put("/password_resets/#{user.reset_token}", params:)
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
@@ -283,7 +283,7 @@ RSpec.describe "PasswordResets", type: :request do
               password_confirmation: "password"
             }
           }
-          put "/password_resets/#{user.reset_token}", params: params
+          put("/password_resets/#{user.reset_token}", params:)
           error_message = I18n.t("errors.display_message.password_reset.expired")
           result = JSON.parse(response.body, { symbolize_names: true })
           expect(result[:error][:message]).to eq error_message
