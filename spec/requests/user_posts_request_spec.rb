@@ -4,9 +4,10 @@ RSpec.describe "UserPosts", type: :request do
   describe "/user_posts" do
     before do
       @user = FactoryBot.create(:user)
-      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
-        { user_id: @user.id }
-      )
+      session = { user_id: @user.id }
+      session.class_eval { def enabled?; true; end }
+      session.class_eval { def loaded?; true; end }
+      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(session)
       @post1 = FactoryBot.create(:post, user: @user, content: "test1")
       @post2 = FactoryBot.create(:post, user: @user, content: "test2")
     end
@@ -72,9 +73,10 @@ RSpec.describe "UserPosts", type: :request do
   describe "/user_posts/:id" do
     before do
       @user = FactoryBot.create(:user)
-      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(
-        { user_id: @user.id }
-      )
+      session = { user_id: @user.id }
+      session.class_eval { def enabled?; true; end }
+      session.class_eval { def loaded?; true; end }
+      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(session)
       @post1 = FactoryBot.create(:post, user: @user, content: "test1")
     end
 
