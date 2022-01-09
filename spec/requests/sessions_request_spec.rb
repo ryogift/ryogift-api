@@ -131,10 +131,13 @@ RSpec.describe "Sessions", type: :request do
 
   describe "/client_user" do
     before do
-      session = { user_id: @user.id }
-      session.class_eval { def enabled?; true; end }
-      session.class_eval { def loaded?; true; end }
-      allow_any_instance_of(ActionDispatch::Request).to receive(:session).and_return(session)
+      params = {
+        session: {
+          email: @user.email,
+          password: "password"
+        }
+      }
+      post("/login", params:)
     end
 
     example "HTTPステータスが200 OKであること" do
