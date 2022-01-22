@@ -32,6 +32,7 @@ jobs:
         RAILS_DATABASE_HOST: postgres
         POSTGRES_USER: postgres
         POSTGRES_PASSWORD: postgres
+        RUBY_YJIT_ENABLE: 1
     steps:
       - name: checkout
         uses: actions/checkout@v2
