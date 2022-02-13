@@ -13,7 +13,6 @@ gem "net-smtp", require: false
 
 group :development, :test do
   gem "rubocop", require: false
-  gem "pry-rails"
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "parallel_tests"
