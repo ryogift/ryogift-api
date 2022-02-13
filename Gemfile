@@ -12,7 +12,6 @@ gem "rack-cors", "1.1.1"
 gem "net-smtp", require: false
 
 group :development, :test do
-  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
   gem "rubocop", require: false
   gem "pry-rails"
   gem "rspec-rails"
