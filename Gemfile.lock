@@ -214,7 +214,7 @@ GEM
     rubocop-ast (1.15.2)
       parser (>= 3.0.1.1)
     ruby-progressbar (1.11.0)
-    stackprof (0.2.17)
+    stackprof (0.2.18)
     strscan (3.0.1)
     test-prof (1.0.7)
     thor (1.2.1)
