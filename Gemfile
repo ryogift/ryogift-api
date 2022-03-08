@@ -7,7 +7,7 @@ gem "rails", "7.0.2.2"
 gem "pg", "1.3.3"
 gem "puma", "5.6.2"
 gem "bcrypt", "3.1.16"
-gem "bootsnap", "1.10.3", require: false
+gem "bootsnap", "1.11.1", require: false
 gem "rack-cors", "1.1.1"
 gem "net-smtp", require: false
 
